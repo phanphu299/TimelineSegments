@@ -12,20 +12,27 @@ const TimelineSegments = ({ data, totalTrackLength }) => {
   const getRows = (segmentList) => {
     segmentList.sort((a, b) => a.end - b.end);
     let rows = [];
-    segmentList.forEach(item => {
+    segmentList.forEach((item) => {
       let addNewRow = true;
       for (let row of rows) {
-        if(row[row.length - 1].end <= item.start){
+        if (row[row.length - 1].end <= item.start) {
           row.push(item);
           addNewRow = false;
           break;
         }
       }
-      if(addNewRow){
+      if (addNewRow) {
         rows.push(new Array(item));
-      }     
+      }
     });
-    console.log(rows);
+
+    rows.forEach((item) => {
+      for (let i = 0; i < item.length; i++) {
+        if (i > 0) item[i].lastValue = item[i - 1].end;
+        else item[i].lastValue = 0;
+      }
+    });
+
     return rows;
   };
   return (
