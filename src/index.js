@@ -37,8 +37,8 @@ const TimelineSegments = ({ data, totalTrackLength }) => {
   };
   return (
     <div className="container">
-      {rows.map((item) => (
-        <div className="row" key={Math.random()}>
+      {rows.map((item, index) => (
+        <div className="row" key={index}>
           {item.map((item) => (
             <Segment key={item.id} item={item} />
           ))}
