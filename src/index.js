@@ -6,35 +6,30 @@ import Segment from "./components/Segment";
 // assume all data is valid and sorted by start time
 const TimelineSegments = ({ data, totalTrackLength }) => {
   const [rows, setRows] = useState([]);
+  
   useEffect(() => {
     setRows(getRows(data));
   }, []);
-  const getRows = (segmentList) => {
+  
+  const getRows = segmentList => {
     segmentList.sort((a, b) => a.end - b.end);
     let rows = [];
-    segmentList.forEach((item) => {
+    segmentList.forEach(item => {
       let addNewRow = true;
       for (let row of rows) {
         if (row[row.length - 1].end <= item.start) {
-          row.push(item);
+          row.push({ ...item, lastValue: row[row.length - 1].end });
           addNewRow = false;
           break;
         }
       }
       if (addNewRow) {
-        rows.push(new Array(item));
+        rows.push(new Array({ ...item, lastValue: 0 }));
       }
     });
-
-    rows.forEach((item) => {
-      for (let i = 0; i < item.length; i++) {
-        if (i > 0) item[i].lastValue = item[i - 1].end;
-        else item[i].lastValue = 0;
-      }
-    });
-
     return rows;
   };
+  
   return (
     <div className="container">
       {rows.map((item, index) => (
